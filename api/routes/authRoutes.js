@@ -1,8 +1,11 @@
+const signUpController = require('../controller/auth.controller');
 const { validateLogin, redirectIfAuthenticated } = require('../middleware/authMiddleware');
 const { loginLimiter } = require('../middleware/limiter');
 const passport = require('../strategies/local')
 const express = require('express')
 const router = express();
+
+router.post('/signup',signUpController)
 
 router.post('/login',loginLimiter, validateLogin,(req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
