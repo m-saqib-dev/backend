@@ -1,9 +1,14 @@
-const validator = require('validator')
+const validator = require('validator');
+const { sendError, sendSuccess } = require('../utils/respones');
 const requireLogin = (req, res, next) => {
-    if (req.session.user) { // Check if req.session.user exists
-        next(); // User is logged in, proceed
+    if (req.isAuthenticated()) {
+        sendSuccess(res, 'User is logged in', {
+            ...req.user._doc,
+            password: undefined
+        });
+        next();
     } else {
-        return res.status(401).json({ success: false, message: 'Unauthorized' }); // Or redirect to login
+        return sendError(res, 401, 'User is not logged in');
     }
 };
 function redirectIfAuthenticated(req, res, next) {
